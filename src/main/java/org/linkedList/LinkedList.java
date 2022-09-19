@@ -14,15 +14,14 @@ public class LinkedList<T> {
   // toString function that is called when LinkedList is prTed
   // Allows us to prT out the LinkedList in a nice format: 1 -> 2 -> 3 -> null
   public String toString() {
-    String str = "";
+    StringBuilder str = new StringBuilder();
     Node current = head;
-    while (current != null)
-    {
-      str = str + current.data + " -> ";
+    while (current != null) {
+      str.append(current.data).append(" -> ");
       current = current.next;
     }
-    str +=  "null";
-    return str;
+    str.append("null");
+    return str.toString();
   }
 
   // Inserts a new node at the front of the LinkedList (prepend)
@@ -38,7 +37,7 @@ public class LinkedList<T> {
     if (head == null) {
       head = newNode;
     } else {
-      Node current = head;
+      Node<T> current = head;
       while (current.next != null) {
         current = current.next;
       }
@@ -49,7 +48,7 @@ public class LinkedList<T> {
   // Returns true if val is present in the list, and false otherwise
   public boolean search(T val) {
     // YOUR CODE HERE
-    for (Node current = head; current != null; current = current.next) {
+    for (Node<T> current = head; current != null; current = current.next) {
       if (current.data == val) {
         return true;
       }
@@ -73,7 +72,7 @@ public class LinkedList<T> {
   // Returns -1 if the list is empty
 
   public T removeLast() {
-    if (head == null ) {
+    if (head == null) {
       return null;
     }
     if (head.next == null) {
