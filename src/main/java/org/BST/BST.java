@@ -45,30 +45,28 @@ public class BST {
     if (current == null) {
       return null;
     }
-    if (current.data != val) {
+    if (current.data == val) {
+      if (current.left == null && current.right == null) {
+        return null;
+      } else if (current.left != null) {
+        if (current.right == null) {
+          return current.left;
+        } else {
+          Node temp = current.right;
+          while (temp.left != null) {
+            temp = temp.left;
+          }
+          current.data = temp.data;
+          current.right = deleteRec(temp.data, current.right);
+        }
+      } else {
+        return current.right;
+      }
+    } else {
       if (current.data > val) {
         current.left = deleteRec(val, current.left);
       } else {
         current.right = deleteRec(val, current.right);
-      }
-    } else {
-      if (current.left == null && current.right == null) {
-        return null;
-      } else {
-        if (current.left != null) {
-          if (current.right == null) {
-            return current.left;
-          } else {
-            Node temp = current.right;
-            while (temp.left != null) {
-              temp = temp.left;
-            }
-            current.data = temp.data;
-            current.right = deleteRec(temp.data, current.right);
-          }
-        } else {
-          return current.right;
-        }
       }
     }
     return current;
@@ -87,33 +85,34 @@ public class BST {
   // Left, root, right
   public static void inOrderTraversal(Node node) {
     // REPLACE WITH YOUR CODE HERE
-    if (node != null) {
-      inOrderTraversal(node.left);
-      System.out.println(node.data);
-      inOrderTraversal(node.right);
+    if (node == null) {
+      return;
     }
+    inOrderTraversal(node.left);
+    System.out.println(node.data);
+    inOrderTraversal(node.right);
   }
 
   // Carries out an preorder traversal:
   // Root, left right
   public static void preOrderTraversal(Node node) {
     // REPLACE WITH YOUR CODE HERE
-    if (node != null) {
-      System.out.println(node.data);
-      preOrderTraversal(node.left);
-      preOrderTraversal(node.right);
+    if (node == null) {
+      return;
     }
+    System.out.println(node.data);
+    preOrderTraversal(node.left);
+    preOrderTraversal(node.right);
   }
 
   // Carries out a postorder traversal
   // Left, right, root
   public static void postOrderTraversal(Node node) {
     // REPLACE WITH YOUR CODE HERE
-    if (node != null) {
-      postOrderTraversal(node.left);
-      postOrderTraversal(node.right);
-      System.out.println(node.data);
-    }
+    if (node == null) return;
+    postOrderTraversal(node.left);
+    postOrderTraversal(node.right);
+    System.out.println(node.data);
   }
 
   public static void main(String[] args) {
