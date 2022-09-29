@@ -5,19 +5,19 @@ import java.util.Map;
 
 public class XOR {
   public static String XORDecrypt(String encrypted) {
-    ArrayList<String> dictionary = new ArrayList<>();
+    ArrayList<String> keys = new ArrayList<>();
     Map.Entry<Integer, String> best = Map.entry(Integer.MIN_VALUE, "");
     // iterate through possible 3 lowercase character keys and add to dictionary
     for (int i = 97; i < 123; i++) {
       for (int j = 97; j < 123; j++) {
         for (int k = 97; k < 123; k++) {
-          dictionary.add("" + (char) i + (char) j + (char) k);
+          keys.add("" + (char) i + (char) j + (char) k);
         }
       }
     }
 
     // iterate through dictionary and XOR with encrypted string
-    for (String key : dictionary) {
+    for (String key : keys) {
       String decryptedString = "";
       for (int i = 0; i < encrypted.length(); i++) {
         decryptedString += (char) (encrypted.charAt(i) ^ key.charAt(i % 3));
@@ -35,6 +35,7 @@ public class XOR {
     for (int i = 0; i < b.length(); i++) {
       char c = b.charAt(i);
       if ('A' <= c && c <= 'Z') sum += 1;
+      else if (c == ' ') sum += 1;
       else if ('a' <= c && c <= 'z') sum += 2;
       else if (c < 0x20 || c == 0x7F) sum -= 10;
     }
@@ -104,8 +105,8 @@ public class XOR {
       10, 22, 21, 11, 12, 3, 69, 25, 2, 0, 88, 21, 19, 29, 30, 69, 22, 5, 8, 26, 21, 23, 11, 94
     };
     StringBuilder textAsString = new StringBuilder();
-    for (int i = 0; i < text.length; i++) {
-      textAsString.append((char) i);
+    for (int value : text) {
+      textAsString.append((char) value);
     }
     String encodedString = textAsString.toString();
     System.out.println(XORDecrypt(encodedString) + "\n");
@@ -131,6 +132,7 @@ public class XOR {
         }
       }
     }
+
     System.out.println(bestString);
   }
 }

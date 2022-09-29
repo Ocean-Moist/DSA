@@ -37,7 +37,16 @@ public class AVL {
   //  Cl   Cr
   public Node LL_Rotate(Node A) {
     // REPLACE WITH YOUR CODE
-    return null;
+    Node B = A.left;
+    Node Br = B.right;
+
+    B.right = A;
+    A.left = Br;
+
+    A.height = Math.max(getHeight(A.left), getHeight(A.right)) + 1;
+    B.height = Math.max(getHeight(B.left), getHeight(B.right)) + 1;
+
+    return B;
   }
 
   //      A                             C
@@ -49,7 +58,20 @@ public class AVL {
   //   Cl   Cr
   public Node LR_Rotate(Node A) {
     // REPLACE WITH YOUR CODE
-    return null;
+
+    Node B = A.left;
+    Node C = B.right;
+
+    B.right = C.left;
+    A.left = C.right;
+
+    C.left = B;
+    C.right = A;
+
+    A.height = Math.max(getHeight(A.left), getHeight(A.right)) + 1;
+    B.height = Math.max(getHeight(B.left), getHeight(B.right)) + 1;
+
+    return C;
   }
 
   //   A                                B
@@ -61,7 +83,16 @@ public class AVL {
   //      Cl  Cr
   public Node RR_Rotate(Node A) {
     // REPLACE WITH YOUR CODE
-    return null;
+    Node B = A.right;
+    Node Bl = B.left;
+
+    B.left = A;
+    A.right = Bl;
+
+    A.height = Math.max(getHeight(A.left), getHeight(A.right)) + 1;
+    B.height = Math.max(getHeight(B.left), getHeight(B.right)) + 1;
+
+    return B;
   }
 
   //    A                           C
@@ -74,7 +105,19 @@ public class AVL {
 
   public Node RL_Rotate(Node A) {
     // REPLACE WITH YOUR CODE
-    return null;
+    Node B = A.right;
+    Node C = B.left;
+
+    B.left = C.right;
+    A.right = C.left;
+
+    C.left = A;
+    C.right = B;
+
+    A.height = Math.max(getHeight(A.left), getHeight(A.right)) + 1;
+    B.height = Math.max(getHeight(B.left), getHeight(B.right)) + 1;
+
+    return C;
   }
 
   // Inserts into our tree, recursively
@@ -105,7 +148,23 @@ public class AVL {
 
     // 4) If unbalanced, perform necessary rotations
     if (bf > 1 || bf < -1) {
-      // ADD YOUR CODE HERE
+      if (bf > 1 && data < current.left.data) {
+        return LL_Rotate(current);
+      }
+
+      if (bf < -1 && data > current.right.data) {
+        return RR_Rotate(current);
+      }
+
+      if (bf > 1 && data > current.left.data) {
+        current.left = RR_Rotate(current.left);
+        return LL_Rotate(current);
+      }
+
+      if (bf < -1 && data < current.right.data) {
+        current.right = LL_Rotate(current.right);
+        return RR_Rotate(current);
+      }
     }
 
     // 4) If balanced, return the original node
@@ -174,7 +233,23 @@ public class AVL {
 
     // 4) If unbalanced, perform necessary rotations
     if (bf > 1 || bf < -1) {
-      // ADD YOUR CODE HERE
+      if (bf > 1 && balanceFactor(current.left) >= 0) {
+        return LL_Rotate(current);
+      }
+
+      if (bf < -1 && balanceFactor(current.right) <= 0) {
+        return RR_Rotate(current);
+      }
+
+      if (bf > 1 && balanceFactor(current.left) < 0) {
+        current.left = RR_Rotate(current.left);
+        return LL_Rotate(current);
+      }
+
+      if (bf < -1 && balanceFactor(current.right) > 0) {
+        current.right = LL_Rotate(current.right);
+        return RR_Rotate(current);
+      }
     }
 
     // 4) If balanced, return the original node
@@ -553,299 +628,304 @@ public class AVL {
     // / \
     // 1 4
 
-    //        // --------------------------
-    //        // Test 5: Deletion LL
-    //        // --------------------------
-    //        System.out.println("-------------------");
-    //        System.out.println("Test 5: Deletion LL");
-    //        System.out.println("Expected:");
-    //        System.out.println("   6       \n" +
-    //                "  / \\   \n" +
-    //                " /   \\  \n" +
-    //                " 5   8   \n" +
-    //                "/   / \\ \n" +
-    //                "4   7 9 ");
-    //        System.out.println();
-    //        System.out.println("   6       \n" +
-    //                "  / \\   \n" +
-    //                " /   \\  \n" +
-    //                " 5   8   \n" +
-    //                "/   / \\ \n" +
-    //                "4   7 10 ");
-    //
-    //        System.out.println("\nGot:");
-    //        // Delete a leaf, should do LL rotate
-    //        AVL AVL5 = new AVL();
-    //        AVL5.insert(8);
-    //        AVL5.insert(6);
-    //        AVL5.insert(9);
-    //        AVL5.insert(5);
-    //        AVL5.insert(7);
-    //        AVL5.insert(10);
-    //        AVL5.insert(4);
-    //        // This is what the tree looks like prior to deletion
-    //        // BTreePrinter.printNode(AVL5.root);
-    //        //        8
-    //        //       / \
-    //        //      /   \
-    //        //     /     \
-    //        //    /       \
-    //        //    6       9
-    //        //   / \       \
-    //        //  /   \       \
-    //        //  5   7       10
-    //        // /
-    //        // 4
-    //
-    //        AVL5.delete(10);
-    //        BTreePrinter.printNode(AVL5.root);
-    //        //    6
-    //        //   / \
-    //        //  /   \
-    //        //  5   8
-    //        // /   / \
-    //        // 4   7 9
-    //
-    //        // Delete a node with one child, should do LL rotate
-    //        AVL AVL6 = new AVL();
-    //        AVL6.insert(8);
-    //        AVL6.insert(6);
-    //        AVL6.insert(9);
-    //        AVL6.insert(5);
-    //        AVL6.insert(7);
-    //        AVL6.insert(10);
-    //        AVL6.insert(4);
-    //        // This is what the tree looks like prior to deletion
-    //        // BTreePrinter.printNode(AVL6.root);
-    //        //        8
-    //        //       / \
-    //        //      /   \
-    //        //     /     \
-    //        //    /       \
-    //        //    6       9
-    //        //   / \       \
-    //        //  /   \       \
-    //        //  5   7       10
-    //        // /
-    //        // 4
-    //
-    //        AVL6.delete(9);
-    //        BTreePrinter.printNode(AVL6.root);
-    //        //    6
-    //        //   / \
-    //        //  /   \
-    //        //  5   8
-    //        // /   / \
-    //        // 4   7 10
-    //
-    //        // --------------------------
-    //        // Test 6: Deletion RR
-    //        // --------------------------
-    //        System.out.println("-------------------");
-    //        System.out.println("Test 6: Deletion RR");
-    //        System.out.println("Expected:");
-    //        System.out.println("   6       \n" +
-    //                "  / \\   \n" +
-    //                " /   \\  \n" +
-    //                " 3   7   \n" +
-    //                "/ \\   \\ \n" +
-    //                "2 5   8 ");
-    //        System.out.println();
-    //        System.out.println("   6       \n" +
-    //                "  / \\   \n" +
-    //                " /   \\  \n" +
-    //                " 3   7   \n" +
-    //                "/ \\   \\ \n" +
-    //                "1 5   8 ");
-    //
-    //        System.out.println("\nGot:");
-    //        // Delete a leaf, should do RR rotate
-    //        AVL AVL51 = new AVL();
-    //        AVL51.insert(3);
-    //        AVL51.insert(6);
-    //        AVL51.insert(2);
-    //        AVL51.insert(7);
-    //        AVL51.insert(5);
-    //        AVL51.insert(1);
-    //        AVL51.insert(8);
-    //        // This is what the tree looks like prior to deletion
-    //        // BTreePrinter.printNode(AVL51.root);
-    //        //        3
-    //        //       / \
-    //        //      /   \
-    //        //     /     \
-    //        //    /       \
-    //        //    2       6
-    //        //   /       / \
-    //        //  /       /   \
-    //        //  1       5   7
-    //        //               \
-    //        //               8
-    //
-    //        AVL51.delete(1);
-    //        BTreePrinter.printNode(AVL51.root);
-    //        //    6
-    //        //   / \
-    //        //  /   \
-    //        //  5   8
-    //        // /   / \
-    //        // 4   7 9
-    //
-    //        // Delete a node with one child, should do RR rotate
-    //        // Delete a leaf, should do RR rotate
-    //        AVL AVL61 = new AVL();
-    //        AVL61.insert(3);
-    //        AVL61.insert(6);
-    //        AVL61.insert(2);
-    //        AVL61.insert(7);
-    //        AVL61.insert(5);
-    //        AVL61.insert(1);
-    //        AVL61.insert(8);
-    //        // This is what the tree looks like prior to deletion
-    //        // BTreePrinter.printNode(AVL61.root);
-    //        //        3
-    //        //       / \
-    //        //      /   \
-    //        //     /     \
-    //        //    /       \
-    //        //    2       6
-    //        //   /       / \
-    //        //  /       /   \
-    //        //  1       5   7
-    //        //               \
-    //        //               8
-    //
-    //        AVL61.delete(2);
-    //        BTreePrinter.printNode(AVL61.root);
-    //        //    6
-    //        //   / \
-    //        //  /   \
-    //        //  5   8
-    //        // /   / \
-    //        // 4   7 10
-    //
-    //
-    //        // --------------------------
-    //        // Test 7: Deletion LR
-    //        // --------------------------
-    //        System.out.println("-------------------");
-    //        System.out.println("Test 7: Deletion LR");
-    //        System.out.println("Expected:");
-    //        System.out.println("   7       \n" +
-    //                "  / \\   \n" +
-    //                " /   \\  \n" +
-    //                " 5   8   \n" +
-    //                "/ \\   \\ \n" +
-    //                "4 6   9 ");
-    //
-    //        System.out.println("\nGot:");
-    //        // Delete a leaf, should do LR rotate
-    //        AVL AVL7 = new AVL();
-    //        AVL7.insert(8);
-    //        AVL7.insert(5);
-    //        AVL7.insert(9);
-    //        AVL7.insert(4);
-    //        AVL7.insert(7);
-    //        AVL7.insert(10);
-    //        AVL7.insert(6);
-    //
-    //        // This what the tree looks like prior to deletion
-    //        // BTreePrinter.printNode(AVL7.root);
-    //        //       8
-    //        //      / \
-    //        //     /   \
-    //        //    /     \
-    //        //   /       \
-    //        //   5       9
-    //        //  / \       \
-    //        // /   \       \
-    //        // 4   7       10
-    //        //    /
-    //        //    6
-    //
-    //        AVL7.delete(10);
-    //        BTreePrinter.printNode(AVL7.root);
-    //        //    7
-    //        //   / \
-    //        //  /   \
-    //        //  5   8
-    //        // / \   \
-    //        // 4 6   9
-    //
-    //        // --------------------------
-    //        // Test 8: Deletion with 2 RL rotations
-    //        // --------------------------
-    //        System.out.println("-------------------");
-    //        System.out.println("Test 8: Deletion with 2 RL rotations");
-    //        System.out.println("Expected:");
-    //        System.out.println("       7               \n" +
-    //                "      / \\       \n" +
-    //                "     /   \\      \n" +
-    //                "    /     \\     \n" +
-    //                "   /       \\    \n" +
-    //                "   5       10       \n" +
-    //                "  / \\     / \\   \n" +
-    //                " /   \\   /   \\  \n" +
-    //                " 3   6   9   11   \n" +
-    //                "/ \\     /     \\ \n" +
-    //                "2 4     8     12 ");
-    //
-    //        // Delete a leaf, should rotate twice RL and then RL
-    //        System.out.println("\nGot:");
-    //        AVL AVL8 = new AVL();
-    //        AVL8.insert(5);
-    //
-    //        AVL8.insert(2);
-    //        AVL8.insert(10);
-    //
-    //        AVL8.insert(1);
-    //        AVL8.insert(4);
-    //        AVL8.insert(7);
-    //        AVL8.insert(11);
-    //
-    //        AVL8.insert(3);
-    //        AVL8.insert(6);
-    //        AVL8.insert(9);
-    //        AVL8.insert(12);
-    //
-    //        AVL8.insert(8);
-    //
-    //        // This is what the tree looks like prior to deletion
-    //        // BTreePrinter.printNode(AVL8.root);
-    //        //               5
-    //        //              / \
-    //        //             /   \
-    //        //            /     \
-    //        //           /       \
-    //        //          /         \
-    //        //         /           \
-    //        //        /             \
-    //        //       /               \
-    //        //       2               10
-    //        //      / \             / \
-    //        //     /   \           /   \
-    //        //    /     \         /     \
-    //        //   /       \       /       \
-    //        //   1       4       7       11
-    //        //          /       / \       \
-    //        //         /       /   \       \
-    //        //         3       6   9       12
-    //        //                    /
-    //        //                    8
-    //
-    //        AVL8.delete(1);
-    //        BTreePrinter.printNode(AVL8.root);
-    //        //        7
-    //        //       / \
-    //        //      /   \
-    //        //     /     \
-    //        //    /       \
-    //        //    5       10
-    //        //   / \     / \
-    //        //  /   \   /   \
-    //        //  3   6   9   11
-    //        // / \     /     \
-    //        // 2 4     8     12
+    // --------------------------
+    // Test 5: Deletion LL
+    // --------------------------
+    System.out.println("-------------------");
+    System.out.println("Test 5: Deletion LL");
+    System.out.println("Expected:");
+    System.out.println(
+        "   6       \n"
+            + "  / \\   \n"
+            + " /   \\  \n"
+            + " 5   8   \n"
+            + "/   / \\ \n"
+            + "4   7 9 ");
+    System.out.println();
+    System.out.println(
+        "   6       \n"
+            + "  / \\   \n"
+            + " /   \\  \n"
+            + " 5   8   \n"
+            + "/   / \\ \n"
+            + "4   7 10 ");
+
+    System.out.println("\nGot:");
+    // Delete a leaf, should do LL rotate
+    AVL AVL5 = new AVL();
+    AVL5.insert(8);
+    AVL5.insert(6);
+    AVL5.insert(9);
+    AVL5.insert(5);
+    AVL5.insert(7);
+    AVL5.insert(10);
+    AVL5.insert(4);
+    // This is what the tree looks like prior to deletion
+    // BTreePrinter.printNode(AVL5.root);
+    //        8
+    //       / \
+    //      /   \
+    //     /     \
+    //    /       \
+    //    6       9
+    //   / \       \
+    //  /   \       \
+    //  5   7       10
+    // /
+    // 4
+
+    AVL5.delete(10);
+    BTreePrinter.printNode(AVL5.root);
+    //    6
+    //   / \
+    //  /   \
+    //  5   8
+    // /   / \
+    // 4   7 9
+
+    // Delete a node with one child, should do LL rotate
+    AVL AVL6 = new AVL();
+    AVL6.insert(8);
+    AVL6.insert(6);
+    AVL6.insert(9);
+    AVL6.insert(5);
+    AVL6.insert(7);
+    AVL6.insert(10);
+    AVL6.insert(4);
+    // This is what the tree looks like prior to deletion
+    // BTreePrinter.printNode(AVL6.root);
+    //        8
+    //       / \
+    //      /   \
+    //     /     \
+    //    /       \
+    //    6       9
+    //   / \       \
+    //  /   \       \
+    //  5   7       10
+    // /
+    // 4
+
+    AVL6.delete(9);
+    BTreePrinter.printNode(AVL6.root);
+    //    6
+    //   / \
+    //  /   \
+    //  5   8
+    // /   / \
+    // 4   7 10
+
+    // --------------------------
+    // Test 6: Deletion RR
+    // --------------------------
+    System.out.println("-------------------");
+    System.out.println("Test 6: Deletion RR");
+    System.out.println("Expected:");
+    System.out.println(
+        "   6       \n"
+            + "  / \\   \n"
+            + " /   \\  \n"
+            + " 3   7   \n"
+            + "/ \\   \\ \n"
+            + "2 5   8 ");
+    System.out.println();
+    System.out.println(
+        "   6       \n"
+            + "  / \\   \n"
+            + " /   \\  \n"
+            + " 3   7   \n"
+            + "/ \\   \\ \n"
+            + "1 5   8 ");
+
+    System.out.println("\nGot:");
+    // Delete a leaf, should do RR rotate
+    AVL AVL51 = new AVL();
+    AVL51.insert(3);
+    AVL51.insert(6);
+    AVL51.insert(2);
+    AVL51.insert(7);
+    AVL51.insert(5);
+    AVL51.insert(1);
+    AVL51.insert(8);
+    // This is what the tree looks like prior to deletion
+    // BTreePrinter.printNode(AVL51.root);
+    //        3
+    //       / \
+    //      /   \
+    //     /     \
+    //    /       \
+    //    2       6
+    //   /       / \
+    //  /       /   \
+    //  1       5   7
+    //               \
+    //               8
+
+    AVL51.delete(1);
+    BTreePrinter.printNode(AVL51.root);
+    //    6
+    //   / \
+    //  /   \
+    //  5   8
+    // /   / \
+    // 4   7 9
+
+    // Delete a node with one child, should do RR rotate
+    // Delete a leaf, should do RR rotate
+    AVL AVL61 = new AVL();
+    AVL61.insert(3);
+    AVL61.insert(6);
+    AVL61.insert(2);
+    AVL61.insert(7);
+    AVL61.insert(5);
+    AVL61.insert(1);
+    AVL61.insert(8);
+    // This is what the tree looks like prior to deletion
+    // BTreePrinter.printNode(AVL61.root);
+    //        3
+    //       / \
+    //      /   \
+    //     /     \
+    //    /       \
+    //    2       6
+    //   /       / \
+    //  /       /   \
+    //  1       5   7
+    //               \
+    //               8
+
+    AVL61.delete(2);
+    BTreePrinter.printNode(AVL61.root);
+    //    6
+    //   / \
+    //  /   \
+    //  5   8
+    // /   / \
+    // 4   7 10
+
+    // --------------------------
+    // Test 7: Deletion LR
+    // --------------------------
+    System.out.println("-------------------");
+    System.out.println("Test 7: Deletion LR");
+    System.out.println("Expected:");
+    System.out.println(
+        "   7       \n"
+            + "  / \\   \n"
+            + " /   \\  \n"
+            + " 5   8   \n"
+            + "/ \\   \\ \n"
+            + "4 6   9 ");
+
+    System.out.println("\nGot:");
+    // Delete a leaf, should do LR rotate
+    AVL AVL7 = new AVL();
+    AVL7.insert(8);
+    AVL7.insert(5);
+    AVL7.insert(9);
+    AVL7.insert(4);
+    AVL7.insert(7);
+    AVL7.insert(10);
+    AVL7.insert(6);
+
+    // This what the tree looks like prior to deletion
+    // BTreePrinter.printNode(AVL7.root);
+    //       8
+    //      / \
+    //     /   \
+    //    /     \
+    //   /       \
+    //   5       9
+    //  / \       \
+    // /   \       \
+    // 4   7       10
+    //    /
+    //    6
+
+    AVL7.delete(10);
+    BTreePrinter.printNode(AVL7.root);
+    //    7
+    //   / \
+    //  /   \
+    //  5   8
+    // / \   \
+    // 4 6   9
+
+    // --------------------------
+    // Test 8: Deletion with 2 RL rotations
+    // --------------------------
+    System.out.println("-------------------");
+    System.out.println("Test 8: Deletion with 2 RL rotations");
+    System.out.println("Expected:");
+    System.out.println(
+        "       7               \n"
+            + "      / \\       \n"
+            + "     /   \\      \n"
+            + "    /     \\     \n"
+            + "   /       \\    \n"
+            + "   5       10       \n"
+            + "  / \\     / \\   \n"
+            + " /   \\   /   \\  \n"
+            + " 3   6   9   11   \n"
+            + "/ \\     /     \\ \n"
+            + "2 4     8     12 ");
+
+    // Delete a leaf, should rotate twice RL and then RL
+    System.out.println("\nGot:");
+    AVL AVL8 = new AVL();
+    AVL8.insert(5);
+
+    AVL8.insert(2);
+    AVL8.insert(10);
+
+    AVL8.insert(1);
+    AVL8.insert(4);
+    AVL8.insert(7);
+    AVL8.insert(11);
+
+    AVL8.insert(3);
+    AVL8.insert(6);
+    AVL8.insert(9);
+    AVL8.insert(12);
+
+    AVL8.insert(8);
+
+    // This is what the tree looks like prior to deletion
+    // BTreePrinter.printNode(AVL8.root);
+    //               5
+    //              / \
+    //             /   \
+    //            /     \
+    //           /       \
+    //          /         \
+    //         /           \
+    //        /             \
+    //       /               \
+    //       2               10
+    //      / \             / \
+    //     /   \           /   \
+    //    /     \         /     \
+    //   /       \       /       \
+    //   1       4       7       11
+    //          /       / \       \
+    //         /       /   \       \
+    //         3       6   9       12
+    //                    /
+    //                    8
+
+    AVL8.delete(1);
+    BTreePrinter.printNode(AVL8.root);
+    //        7
+    //       / \
+    //      /   \
+    //     /     \
+    //    /       \
+    //    5       10
+    //   / \     / \
+    //  /   \   /   \
+    //  3   6   9   11
+    // / \     /     \
+    // 2 4     8     12
   }
 }
 
@@ -867,19 +947,18 @@ class Node {
 // from: https://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
 class BTreePrinter {
 
-  public static <T extends Comparable<?>> void printNode(Node root) {
+  public static void printNode(Node root) {
     int maxLevel = BTreePrinter.maxLevel(root);
 
     printNodeInternal(Collections.singletonList(root), 1, maxLevel);
   }
 
-  private static <T extends Comparable<?>> void printNodeInternal(
-      List<Node> nodes, int level, int maxLevel) {
+  private static void printNodeInternal(List<Node> nodes, int level, int maxLevel) {
     if (nodes.isEmpty() || BTreePrinter.isAllElementsNull(nodes)) return;
 
     int floor = maxLevel - level;
-    int endgeLines = (int) Math.pow(2, (Math.max(floor - 1, 0)));
-    int firstSpaces = (int) Math.pow(2, (floor)) - 1;
+    int endgeLines = (int) Math.pow(2, Math.max(floor - 1, 0));
+    int firstSpaces = (int) Math.pow(2, floor) - 1;
     int betweenSpaces = (int) Math.pow(2, (floor + 1)) - 1;
 
     BTreePrinter.printWhitespaces(firstSpaces);
@@ -929,7 +1008,7 @@ class BTreePrinter {
     for (int i = 0; i < count; i++) System.out.print(" ");
   }
 
-  private static <T extends Comparable<?>> int maxLevel(Node node) {
+  private static int maxLevel(Node node) {
     if (node == null) return 0;
 
     return Math.max(BTreePrinter.maxLevel(node.left), BTreePrinter.maxLevel(node.right)) + 1;
