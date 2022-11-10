@@ -184,7 +184,7 @@ public class AVL {
     // Base case: current is null (the tree did not contain the node
     // we wanted to delete
     if (current == null) {
-      return current;
+      return null;
     }
 
     // Recursive cases: we haven't found the node to delete yet,
@@ -377,12 +377,13 @@ public class AVL {
     System.out.println("Test 1: LL Rotation");
     System.out.println("Expected:");
     System.out.println(
-        "   6       \n"
-            + "  / \\   \n"
-            + " /   \\  \n"
-            + " 4   8   \n"
-            + "/ \\ / \\ \n"
-            + "3 5 7 9 ");
+        """
+               6      \s
+              / \\  \s
+             /   \\ \s
+             4   8  \s
+            / \\ / \\\s
+            3 5 7 9\s""");
 
     System.out.println("\nGot:");
     AVL AVL1 = new AVL();
@@ -426,12 +427,13 @@ public class AVL {
     System.out.println("Test 1.5: LR Rotation");
     System.out.println("Expected:");
     System.out.println(
-        "   6       \n"
-            + "  / \\   \n"
-            + " /   \\  \n"
-            + " 4   8   \n"
-            + "/ \\ / \\ \n"
-            + "3 5 7 9");
+        """
+               6      \s
+              / \\  \s
+             /   \\ \s
+             4   8  \s
+            / \\ / \\\s
+            3 5 7 9""");
 
     System.out.println("\nGot:");
     AVL AVL2 = new AVL();
@@ -474,12 +476,13 @@ public class AVL {
     System.out.println("Test 2: RR Rotation");
     System.out.println("Expected:");
     System.out.println(
-        "   6       \n"
-            + "  / \\   \n"
-            + " /   \\  \n"
-            + " 4   8   \n"
-            + "/ \\ / \\ \n"
-            + "1 5 7 9");
+        """
+               6      \s
+              / \\  \s
+             /   \\ \s
+             4   8  \s
+            / \\ / \\\s
+            1 5 7 9""");
 
     System.out.println("\nGot:");
 
@@ -963,7 +966,7 @@ class BTreePrinter {
 
     BTreePrinter.printWhitespaces(firstSpaces);
 
-    List<Node> newNodes = new ArrayList<Node>();
+    List<Node> newNodes = new ArrayList<>();
     for (Node node : nodes) {
       if (node != null) {
         System.out.print(node.data);
@@ -977,7 +980,7 @@ class BTreePrinter {
 
       BTreePrinter.printWhitespaces(betweenSpaces);
     }
-    System.out.println("");
+    System.out.println();
 
     for (int i = 1; i <= endgeLines; i++) {
       for (int j = 0; j < nodes.size(); j++) {
@@ -998,7 +1001,7 @@ class BTreePrinter {
         BTreePrinter.printWhitespaces(endgeLines + endgeLines - i);
       }
 
-      System.out.println("");
+      System.out.println();
     }
 
     printNodeInternal(newNodes, level + 1, maxLevel);
