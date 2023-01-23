@@ -3,6 +3,7 @@ package org.heaps;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /** Name: List Anyone You Collaborated With (if any): Terry Davis, Linus Torvalds */
 public class Heap {
@@ -69,29 +70,21 @@ public class Heap {
     arr[x] = arr[y];
     arr[y] = temp;
   }
+
+  public int getSmallestChild(int i) {
+    int child1 = child1(i);
+    int child2 = child2(i);
+
+    if (child1 >= currentSize) return -1;
+    return child2 >= currentSize || arr[child1] < arr[child2] ? child1 : child2;
+  }
   // Move the element with the given index down to it's correct location
   public void trickleDown(int index) {
-    int rChild = child2(index);
-    int lChild = child1(index);
-
-    if (rChild >= currentSize) {
-      if (lChild < currentSize) {
-        if (arr[index] > arr[lChild]) {
-          swap(index, lChild);
-          trickleDown(lChild);
-        }
-      }
-    } else {
-      if (arr[index] > arr[lChild] || arr[index] > arr[rChild]) {
-        if (arr[lChild] < arr[rChild]) {
-          swap(index, lChild);
-          trickleDown(lChild);
-        } else {
-          swap(index, rChild);
-          trickleDown(rChild);
-        }
-      }
-    }
+    int smallestChild = getSmallestChild(index);
+    if (smallestChild == -1 || arr[index] <= arr[smallestChild] || child1(index) >= currentSize)
+      return;
+    swap(index, smallestChild);
+    trickleDown(smallestChild);
   }
 
   // Delete the minimum element; returns -1 if the heap is empty
@@ -146,12 +139,9 @@ public class Heap {
     Heap heap = new Heap();
     heap.arr = unsortedArr;
     heap.currentSize = unsortedArr.length;
-    for (int i = heap.currentSize / 2; i >= 0; i--) {
-      heap.trickleDown(i);
-    }
-    for (int i = 0; i < unsortedArr.length; i++) {
-      unsortedArr[i] = heap.deleteMin();
-    }
+    IntStream.iterate(heap.currentSize / 2, i -> i >= 0, i -> i - 1)
+        .forEachOrdered(heap::trickleDown);
+    IntStream.range(0, unsortedArr.length).forEachOrdered(i -> unsortedArr[i] = heap.deleteMin());
   }
 
   // Creates an array of 100 random numbers between 0 and 10000
@@ -421,18 +411,33 @@ public class Heap {
     // Normal heapsort takes 5362.3701 ns on average (10000 trials)
     // Faster heapsort takes 4127.5475 ns on average (10000 trials)
 
-    // Here is an example of some very basic timing code
-    int[] randoms = generator100();
+    long normalTime = 0;
+    long fasterTime = 0;
+    for (int i = 0; i < 10000; i++) {
+      int[] normalArr = generate100();
+      int[] fasterArr = duplicate100(normalArr);
+      long normalStart = System.nanoTime();
+      heapSort(normalArr);
+      long normalEnd = System.nanoTime();
+      long fasterStart = System.nanoTime();
+      fasterHeapSort(fasterArr);
+      long fasterEnd = System.nanoTime();
+      normalTime += normalEnd - normalStart;
+      fasterTime += fasterEnd - fasterStart;
+    }
 
-    // "Start" the timer
-    long startTime = System.nanoTime();
-    // Call heap sort
-    heapSort(randoms);
-    // "Stop" the timer
-    long stopTime = System.nanoTime();
+    System.out.println(
+        "Normal heapsort takes " + normalTime / 10000.0 + " ns on average (10000 trials)");
+    System.out.println(
+        "Faster heapsort takes " + fasterTime / 10000.0 + " ns on average (10000 trials)");
+  }
 
-    long timeElapsed = stopTime - startTime;
-    System.out.println("Normal heapsort takes " + timeElapsed + " ns (1 trial)");
+  private static int[] generate100() {
+    int[] arr = new int[100];
+    for (int i = 0; i < 100; i++) {
+      arr[i] = (int) (Math.random() * 100);
+    }
+    return arr;
   }
 }
 
