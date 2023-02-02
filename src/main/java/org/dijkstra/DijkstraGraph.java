@@ -70,7 +70,6 @@ public class DijkstraGraph {
     }
 
     HashMap<String, Integer> distances = new HashMap<>();
-    HashMap<String, String> previous = new HashMap<>();
     HashSet<String> visited = new HashSet<>();
     PriorityQueue<Pair<WeightedVertex, Integer>> unvisited = new PriorityQueue<>();
 
@@ -92,7 +91,6 @@ public class DijkstraGraph {
         if (!distances.containsKey(destination.label)
             || distance < distances.get(destination.label)) {
           distances.put(destination.label, distance);
-          previous.put(destination.label, current.label);
           unvisited.add(new Pair<>(destination, distance));
         }
       }
