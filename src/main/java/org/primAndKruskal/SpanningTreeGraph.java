@@ -217,6 +217,47 @@ public class SpanningTreeGraph {
     return tree;
   }
 
+  // brute force traveling
+  public SpanningTreeGraph tsp() {
+    HashSet<WeightedVertex> explored = new HashSet<>();
+    SpanningTreeGraph tree = createEmptyGraph();
+    WeightedVertex start = vertices.get("A");
+    WeightedVertex current = start;
+    explored.add(start);
+    int count = 0;
+
+    while (count < vertices.size() - 1) {
+      // find the min 6edge
+      WeightedEdge min = null;
+      for (WeightedEdge e : current.edges) {
+        if (explored.contains(e.destination)) {
+          continue;
+        }
+        if (min == null || e.weight < min.weight) {
+          min = e;
+        }
+      }
+
+      // add the min edge
+      explored.add(min.destination);
+      tree.addEdge(min);
+      current = min.destination;
+      count++;
+    }
+
+    WeightedEdge min = null;
+    for (WeightedEdge e : current.edges) {
+      if (e.destination.equals(start)) {
+        if (min == null || e.weight < min.weight) {
+          min = e;
+        }
+      }
+    }
+    tree.addEdge(min);
+
+    return tree;
+  }
+
   // Prints out the graph
   public void printGraph() {
     int longest = 7;
