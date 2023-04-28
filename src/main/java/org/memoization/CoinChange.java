@@ -49,7 +49,7 @@ public class CoinChange {
       if (n == 1) return 1;
       if (n == 2) return 2;
 
-      if (!memo.containsKey(n)) memo.put(n,climbStairsMemo(n-2) + climbStairsMemo(n-1));
+      if (!memo.containsKey(n)) memo.put(n, climbStairsMemo(n - 2) + climbStairsMemo(n - 1));
 
       return memo.get(n);
     }
@@ -58,7 +58,7 @@ public class CoinChange {
       if (n == 1) return 1;
       if (n == 2) return 2;
 
-      int[] dp = new int[n+1];
+      int[] dp = new int[n + 1];
       dp[1] = 1;
       dp[2] = 2;
 
@@ -67,7 +67,6 @@ public class CoinChange {
       return dp[n];
     }
   }
-
 
   public static void main(String[] args) {
     // Note: Test 1 should run smoothly even if you haven't implemented

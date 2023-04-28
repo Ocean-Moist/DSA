@@ -62,6 +62,20 @@ public class Inversions {
     return merge(mergeSort(left), mergeSort(right));
   }
 
+  // recursive divide and conquer to find peaks in unimodal arrays in haskell/rust like psuedo code
+  // peakSearch(int[] arr, int start, int end) -> int
+  // peakSearch(arr, start, end) {
+  //   if start == end {
+  //     return start
+  //   }
+  //   mid = (start + end) / 2
+  //   if arr[mid] > arr[mid + 1] {
+  //     return peakSearch(arr, start, mid)
+  //   } else {
+  //     return peakSearch(arr, mid + 1, end)
+  //   }
+  // }
+
   // Merges two arrays AND counts the number of inversions between them
   public static InversionResult mergeAndCount(int[] A, int[] B) {
     // mergeandcount
